@@ -273,24 +273,24 @@ public class ABB {
 	}
 	
 	public ArrayList<User> getAllUsers() {
-		return getAllUsers(raiz, new ArrayList<User>());
+		ArrayList<User> users = new ArrayList<User>();
+		getAllUsers(raiz, users);
+		return users;
 	}
 	
-	private ArrayList<User> getAllUsers(TreeNode raizSub, ArrayList<User> users) {
+	private void getAllUsers(TreeNode raizSub, ArrayList<User> users) {
 		if(raizSub != null)
 			users.add(raizSub.getDado());
 		
 		if(raizSub.getEsq() != null) {
-			users.add(raizSub.getEsq().getDado());
-			return getAllUsers(raizSub.getEsq(), users);
+			getAllUsers(raizSub.getEsq(), users);
 		}
 		
 		if(raizSub.getDir() != null) {
-			users.add(raizSub.getDir().getDado());
-			return getAllUsers(raizSub.getDir(), users);
+			getAllUsers(raizSub.getDir(), users);
 		}
 		
-		return null;
+		return;
 	}
 
 	private int quantidade(TreeNode raizSub) {

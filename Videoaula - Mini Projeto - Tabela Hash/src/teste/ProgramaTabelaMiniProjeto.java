@@ -30,6 +30,9 @@ public class ProgramaTabelaMiniProjeto {
 			case "4":
 				tabela.print();
 			break;
+			case "5":
+				tabela.crescer();
+			break;
 			case "s":
 				System.out.println("Adeus.");
 			break;

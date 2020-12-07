@@ -7,16 +7,17 @@ import tabela.arvore.ABB;
 
 public class TabelaHash implements THashMiniProjeto {
 
-	private ABB[] arvores;
+	private ABB[] tabela;
+	private int quantidadeUsers;
 	
 	public TabelaHash(int size) {
-		arvores = new ABB[size];
+		tabela = new ABB[size];
 	}
 
 	// Método implementado
 	@Override
 	public int hash(int id) {
-		return id % arvores.length;
+		return id % tabela.length;
 	}
 
 	// Método implementado
@@ -30,10 +31,11 @@ public class TabelaHash implements THashMiniProjeto {
 	public void adicionar(User u) throws Exception {
 		int hash = hash(u.getId());
 		
-		if(arvores[hash] == null)
-			arvores[hash] = new ABB();
+		if(tabela[hash] == null)
+			tabela[hash] = new ABB();
 		
-		arvores[hash].inserir(u);
+		tabela[hash].inserir(u);
+		quantidadeUsers++;
 	}
 
 	// Método implementado
@@ -41,8 +43,8 @@ public class TabelaHash implements THashMiniProjeto {
 	public User recuperar(int id) throws Exception {
 		int hash = hash(id);
 		
-		if(arvores[hash] != null)
-			return arvores[hash].buscar(id);
+		if(tabela[hash] != null)
+			return tabela[hash].buscar(id);
 		
 		throw new Exception("[ERRO] User não encontrado");
 	}
@@ -50,11 +52,11 @@ public class TabelaHash implements THashMiniProjeto {
 	// Método implementado
 	@Override
 	public void print() {
-		for (int i = 0; i < arvores.length; i++) {
-			if(arvores[i] != null) {
+		for (int i = 0; i < tabela.length; i++) {
+			if(tabela[i] != null) {
 				try {
 					System.out.print("[" + i + "] - RAIZ -> ");
-					arvores[i].preOrdem();
+					tabela[i].preOrdem();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -66,18 +68,22 @@ public class TabelaHash implements THashMiniProjeto {
 	// Método implementado
 	@Override
 	public void crescer() {
-		ABB[] novaTabela = new ABB[arvores.length * 2];
+		ABB[] novaTabela = new ABB[tabela.length * 2];
 		
 		ArrayList<User> users = new ArrayList<User>();
-		for (int i = 0; i < arvores.length; i++) {
-			ABB abb = arvores[i];
+		for (int i = 0; i < tabela.length; i++) {
+			ABB abb = tabela[i];
 			
-			for (int j = 0; j < abb.getAllUsers().size(); j++) {
-				users.add(abb.getAllUsers().get(i));
+			if(abb != null) {
+				ArrayList<User> usersDaArvore = abb.getAllUsers();
+				
+				for (int j = 0; j < usersDaArvore.size(); j++) {
+					users.add(usersDaArvore.get(j));
+				}				
 			}
 		}
 		
-		arvores = novaTabela;
+		tabela = novaTabela;
 		for (int i = 0; i < users.size(); i++) {
 			try {
 				adicionar(users.get(i));
@@ -90,11 +96,14 @@ public class TabelaHash implements THashMiniProjeto {
 	// Método implementado
 	@Override
 	public int qtd() {
-		int total = 0;
-		for (int i = 0; i < arvores.length; i++) {
-			total += arvores[i].quantidade();
-		}
+//		int total = 0;
+//		for (int i = 0; i < tabela.length; i++) {
+//			if(tabela[i] != null)
+//				total += tabela[i].quantidade();
+//		}
+//		
+//		return total;
 		
-		return total;
+		return quantidadeUsers;
 	}
 }
